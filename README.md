@@ -1,84 +1,69 @@
-# ORBAT reference data for the Trinidad and Tobago Defence Force
+# ORBAT Reference Data for the Trinidad and Tobago Defence Force
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/maxiewright/ttdf-orbat.svg?style=flat-square)](https://packagist.org/packages/maxiewright/ttdf-orbat)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/maxiewright/ttdf-orbat/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/maxiewright/ttdf-orbat/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/maxiewright/ttdf-orbat/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/maxiewright/ttdf-orbat/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/maxiewright/ttdf-orbat.svg?style=flat-square)](https://packagist.org/packages/maxiewright/ttdf-orbat)
+This package publishes structured ORBAT (Order of Battle) reference data for the Trinidad and Tobago Defence Force so Laravel applications can seed formations, ranks, units, and related metadata without manually crafting every entry.
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+## Package Contents
 
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/ttdf-orbat.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/ttdf-orbat)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+- `src/`: Service provider, facade, enums, models, and console command hooks.
+- `database/migrations/*.php.stub`: Migration stubs shipped with the package (formations, rank grades, ranks, units, unit details, unit attachments).
+- `database/seeders`: Seeders for formations, ranks, and the Trinidad and Tobago Regiment (TTR) unit tree.
+- `config/ttdf-orbat.php`: Package configuration file that publishes via vendor:publish.
+- `tests/`: Pest suite covering enums, migrations, models, seeders, and helpers.
 
 ## Installation
 
-You can install the package via composer:
+1. Require the package:
+   ```bash
+   composer require maxiewright/ttdf-orbat
+   ```
+2. Publish migrations, config, and seeders (if needed):
+   ```bash
+   php artisan vendor:publish --tag="ttdf-orbat-migrations"
+   php artisan vendor:publish --tag="ttdf-orbat-config"
+   php artisan vendor:publish --tag="ttdf-orbat-seeders"
+   ```
+3. Run the migrations and seed the reference data:
+   ```bash
+   php artisan migrate
+   php artisan db:seed --class="MaxieWright\TtdfOrbat\Database\Seeders\TtdfOrbatSeeder"
+   ```
+
+## Usage Examples
+
+- Use the provided enums (`NodeType`, `FormationType`, `RankCategory`, `ServiceBranch`, `UnitStatus`, `VesselType`) to cast columns or to enforce valid values before inserting data.
+- Retrieve the TTR formation or its ranks with the models:
+  ```php
+  $formation = Formation::where('abbreviation', 'TTR')->first();
+  $rank = $formation->rankGrades()->first()->titleFor($formation);
+  ```
+- Attach unit details dynamically via the `UnitDetail` model, and track attachments with `UnitAttachment::current()` and `UnitAttachment::historical()`.
+- The `TtdfOrbatCommand` is available via `php artisan ttdf-orbat` for quick sanity checks during development; it echoes `All done`.
+
+## Testing & Static Analysis
+
+Run the Pest suite (recommended with Xdebug when checking coverage):
 
 ```bash
-composer require maxiewright/ttdf-orbat
+./vendor/bin/pest
+XDEBUG_MODE=coverage ./vendor/bin/pest --coverage
 ```
 
-You can publish and run the migrations with:
+Static analysis and formatting:
 
 ```bash
-php artisan vendor:publish --tag="ttdf-orbat-migrations"
-php artisan migrate
+composer analyse
+composer format
 ```
 
-You can publish the config file with:
+Use `composer prepare` after dependencies change to regenerate Laravel Testbench discovery.
 
-```bash
-php artisan vendor:publish --tag="ttdf-orbat-config"
-```
+## Development Notes
 
-This is the contents of the published config file:
+- The package uses Spatie Laravel Package Tools to register the service provider and migrations.
+- Seeders are idempotent and rely on natural keys (abbreviations/codes); repeated runs do not duplicate rows.
+- The TTR unit tree seeder currently seeds the Regiment headquarters, four battalions, support elements, and the Tobago Detachment; future seeders for TTCG/TTAG units are stubbed as TODOs.
+- Refer to `AGENTS.md` for contributor guidance, directory layout, and command recipes.
 
-```php
-return [
-];
-```
+## Support & Contribution
 
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="ttdf-orbat-views"
-```
-
-## Usage
-
-```php
-$ttdfOrbat = new MaxieWright\TtdfOrbat();
-echo $ttdfOrbat->echoPhrase('Hello, MaxieWright!');
-```
-
-## Testing
-
-```bash
-composer test
-```
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
-## Credits
-
-- [Maxie Wright](https://github.com/maxiewright)
-- [All Contributors](../../contributors)
-
-## License
-
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+Report issues via GitHub issues. Contributions should aim for small, focused commits with descriptive messages such as `Add rank seeders for X formation`. Include test results and coverage notes in your PR description.
