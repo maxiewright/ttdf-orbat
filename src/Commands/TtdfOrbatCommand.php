@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace MaxieWright\TtdfOrbat\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class TtdfOrbatCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'ttdf-orbat';
 
     public $description = 'My command';
 

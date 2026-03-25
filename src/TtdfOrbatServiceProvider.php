@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton;
+namespace MaxieWright\TtdfOrbat;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use VendorName\Skeleton\Commands\SkeletonCommand;
+use MaxieWright\TtdfOrbat\Commands\TtdfOrbatCommand;
 
-class SkeletonServiceProvider extends PackageServiceProvider
+class TtdfOrbatServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
@@ -16,10 +16,10 @@ class SkeletonServiceProvider extends PackageServiceProvider
          * More info: https://github.com/spatie/laravel-package-tools
          */
         $package
-            ->name('skeleton')
+            ->name('ttdf-orbat')
             ->hasConfigFile()
             ->hasViews()
-            ->hasMigration('create_migration_table_name_table')
-            ->hasCommand(SkeletonCommand::class);
+            ->hasMigration('create_ttdf_orbat_table')
+            ->hasCommand(TtdfOrbatCommand::class);
     }
 }
