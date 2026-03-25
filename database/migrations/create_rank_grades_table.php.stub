@@ -1,0 +1,26 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('rank_grades', function (Blueprint $table) {
+            $table->id();
+            $table->string('code', 10)->unique()->comment('e.g. OR-3, OF-4, WO-1');
+            $table->string('nato_code', 10)->nullable();
+            $table->string('category', 5)->comment('Cast: RankCategory enum — OF, WO, OR');
+            $table->unsignedTinyInteger('level')->comment('1 = most junior within category');
+            $table->string('label')->comment('e.g. Corporal-equivalent');
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('rank_grades');
+    }
+};

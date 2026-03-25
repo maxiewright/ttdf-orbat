@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('ranks', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('rank_grade_id')->constrained('rank_grades')->cascadeOnDelete();
+            $table->foreignId('formation_id')->constrained('formations')->cascadeOnDelete();
+            $table->string('title')->comment('e.g. Lance Corporal, Leading Seaman');
+            $table->string('abbreviation', 20);
+            $table->string('insignia_path')->nullable();
+            $table->timestamps();
+
+            $table->unique(['rank_grade_id', 'formation_id']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('ranks');
+    }
+};
