@@ -14,18 +14,17 @@ class TtagRankSeeder extends Seeder
         $formation = Formation::where('abbreviation', 'TTAG')->firstOrFail();
 
         $ranks = [
-            ['grade_code' => 'OR-1D', 'title' => 'Aircraftman Under Training', 'abbreviation' => 'AUT'],
+            // Other Ranks
             ['grade_code' => 'OR-1', 'title' => 'Junior Aircraftman', 'abbreviation' => 'JAC'],
             ['grade_code' => 'OR-2', 'title' => 'Senior Aircraftman', 'abbreviation' => 'SAC'],
-            ['grade_code' => 'OR-3', 'title' => 'Corporal', 'abbreviation' => 'Cpl'],
-            ['grade_code' => 'OR-4', 'title' => 'Sergeant', 'abbreviation' => 'Sgt'],
-            ['grade_code' => 'OR-5', 'title' => 'Flight Sergeant', 'abbreviation' => 'FS'],
-            // Temporary placeholders covering OR-6/OR-7 until the Air Guard formalises equivalent ranks.
-            ['grade_code' => 'OR-6', 'title' => 'Senior Flight Sergeant (placeholder)', 'abbreviation' => 'SFS'],
-            ['grade_code' => 'OR-7', 'title' => 'Reserve Senior Flight Sergeant (placeholder)', 'abbreviation' => 'RSF'],
-            ['grade_code' => 'WO-1', 'title' => 'Warrant Officer Class II', 'abbreviation' => 'WO2'],
-            ['grade_code' => 'WO-2', 'title' => 'Warrant Officer Class I', 'abbreviation' => 'WO1'],
-            ['grade_code' => 'OF-1D', 'title' => 'Officer Cadet', 'abbreviation' => 'OCdt'],
+            ['grade_code' => 'OR-3', 'title' => 'Senior Technician', 'abbreviation' => 'Sr Tech'],
+            ['grade_code' => 'OR-4', 'title' => 'Corporal', 'abbreviation' => 'Cpl'],
+            ['grade_code' => 'OR-5', 'title' => 'Sergeant', 'abbreviation' => 'Sgt'],
+            // Warrant Officers
+            ['grade_code' => 'WO-1', 'title' => 'Warrant Officer Class 2', 'abbreviation' => 'WO2'],
+            ['grade_code' => 'WO-2', 'title' => 'Warrant Officer Class 1', 'abbreviation' => 'WO1'],
+            // Officers
+            ['grade_code' => 'OF-D', 'title' => 'Officer Cadet', 'abbreviation' => 'OCdt'],
             ['grade_code' => 'OF-1', 'title' => 'Pilot Officer', 'abbreviation' => 'Plt Off'],
             ['grade_code' => 'OF-2', 'title' => 'Flying Officer', 'abbreviation' => 'Fg Off'],
             ['grade_code' => 'OF-3', 'title' => 'Flight Lieutenant', 'abbreviation' => 'Flt Lt'],

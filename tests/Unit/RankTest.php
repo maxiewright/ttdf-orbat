@@ -17,7 +17,7 @@ it('rank grade codes are unique', function () {
     expect($codes)->toHaveCount($codes->unique()->count());
 });
 
-it('each formation has the same number of ranks', function () {
+it('each formation has 16 ranks', function () {
     $this->seed([
         FormationSeeder::class,
         RankGradeSeeder::class,
@@ -33,7 +33,7 @@ it('each formation has the same number of ranks', function () {
     });
 
     expect($counts->unique())->toHaveCount(1, 'All formations should have the same number of ranks');
-    expect($counts->first())->toBeGreaterThan(0);
+    expect($counts->first())->toBe(16);
 });
 
 it('titleFor returns correct service rank', function () {
@@ -44,8 +44,8 @@ it('titleFor returns correct service rank', function () {
     $ttcg = Formation::where('abbreviation', 'TTCG')->firstOrFail();
 
     Rank::create(['rank_grade_id' => $grade->id, 'formation_id' => $ttr->id, 'title' => 'Corporal', 'abbreviation' => 'Cpl']);
-    Rank::create(['rank_grade_id' => $grade->id, 'formation_id' => $ttcg->id, 'title' => 'Leading Rating', 'abbreviation' => 'LR']);
+    Rank::create(['rank_grade_id' => $grade->id, 'formation_id' => $ttcg->id, 'title' => 'Leading Seaman', 'abbreviation' => 'LS']);
 
     expect($grade->titleFor($ttr)->title)->toBe('Corporal');
-    expect($grade->titleFor($ttcg)->title)->toBe('Leading Rating');
+    expect($grade->titleFor($ttcg)->title)->toBe('Leading Seaman');
 });

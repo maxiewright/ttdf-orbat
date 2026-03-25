@@ -21,16 +21,21 @@ enum NodeType: string
     case Detachment = 'detachment';
     case Installation = 'installation';
     case Unit = 'unit';
+    case Station = 'station';
+    case Wing = 'wing';
+    case Flotilla = 'flotilla';
 
     private const NAVAL_TYPES = [
         self::Base,
         self::Vessel,
-        self::Squadron,
+        self::Flotilla,
+        self::Station,
     ];
 
     private const AIR_TYPES = [
         self::Squadron,
         self::Flight,
+        self::Wing,
     ];
 
     private const ARMY_TYPES = [
@@ -61,6 +66,9 @@ enum NodeType: string
             self::Detachment => 'Detachment',
             self::Installation => 'Installation',
             self::Unit => 'Unit',
+            self::Station => 'Station',
+            self::Wing => 'Wing',
+            self::Flotilla => 'Flotilla',
         };
     }
 

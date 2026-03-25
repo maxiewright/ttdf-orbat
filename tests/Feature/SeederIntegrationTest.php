@@ -7,7 +7,7 @@ use MaxieWright\TtdfOrbat\Models\RankGrade;
 use MaxieWright\TtdfOrbat\Models\Unit;
 
 it('TtdfOrbatSeeder runs without errors', function () {
-    expect(fn () => $this->seed(TtdfOrbatSeeder::class))->not()->toThrow(\Throwable::class);
+    expect(fn () => $this->seed(TtdfOrbatSeeder::class))->not()->toThrow(Throwable::class);
 });
 
 it('seeder creates exactly 4 formations', function () {
@@ -24,33 +24,47 @@ it('seeder creates rank grades with unique codes', function () {
     expect($codes->count())->toBe($codes->unique()->count());
 });
 
-it('TTR has a rank for every grade', function () {
+it('each formation has 16 ranks', function () {
+    $this->seed(TtdfOrbatSeeder::class);
+
+    foreach (['TTR', 'TTCG', 'TTAG'] as $abbreviation) {
+        $formation = Formation::where('abbreviation', $abbreviation)->firstOrFail();
+        $count = Rank::where('formation_id', $formation->id)->count();
+
+        expect($count)->toBe(16, "{$abbreviation} should have 16 ranks, got {$count}");
+    }
+});
+
+it('TTR skips OF-D1 grade and covers all others', function () {
     $this->seed(TtdfOrbatSeeder::class);
 
     $formation = Formation::where('abbreviation', 'TTR')->firstOrFail();
 
-    foreach (RankGrade::all() as $grade) {
-        expect(Rank::where('formation_id', $formation->id)->where('rank_grade_id', $grade->id)->exists())->toBeTrue();
+    foreach (RankGrade::where('code', '!=', 'OF-D1')->get() as $grade) {
+        expect(Rank::where('formation_id', $formation->id)->where('rank_grade_id', $grade->id)->exists())
+            ->toBeTrue("TTR is missing rank for grade {$grade->code}");
     }
 });
 
-it('TTCG has a rank for every grade', function () {
+it('TTCG skips WO-1 grade and covers all others', function () {
     $this->seed(TtdfOrbatSeeder::class);
 
     $formation = Formation::where('abbreviation', 'TTCG')->firstOrFail();
 
-    foreach (RankGrade::all() as $grade) {
-        expect(Rank::where('formation_id', $formation->id)->where('rank_grade_id', $grade->id)->exists())->toBeTrue();
+    foreach (RankGrade::where('code', '!=', 'WO-1')->get() as $grade) {
+        expect(Rank::where('formation_id', $formation->id)->where('rank_grade_id', $grade->id)->exists())
+            ->toBeTrue("TTCG is missing rank for grade {$grade->code}");
     }
 });
 
-it('TTAG has a rank for every grade', function () {
+it('TTAG skips OF-D1 grade and covers all others', function () {
     $this->seed(TtdfOrbatSeeder::class);
 
     $formation = Formation::where('abbreviation', 'TTAG')->firstOrFail();
 
-    foreach (RankGrade::all() as $grade) {
-        expect(Rank::where('formation_id', $formation->id)->where('rank_grade_id', $grade->id)->exists())->toBeTrue();
+    foreach (RankGrade::where('code', '!=', 'OF-D1')->get() as $grade) {
+        expect(Rank::where('formation_id', $formation->id)->where('rank_grade_id', $grade->id)->exists())
+            ->toBeTrue("TTAG is missing rank for grade {$grade->code}");
     }
 });
 

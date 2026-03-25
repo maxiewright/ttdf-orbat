@@ -3,6 +3,7 @@
 namespace MaxieWright\TtdfOrbat\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use MaxieWright\TtdfOrbat\Models\Formation;
 use MaxieWright\TtdfOrbat\Models\Rank;
 use MaxieWright\TtdfOrbat\Models\RankGrade;
@@ -39,7 +40,7 @@ class ValidateCommand extends Command
 
         if (! empty($this->warnings)) {
             $this->newLine();
-            $this->components->warn('Warnings (' . count($this->warnings) . ')');
+            $this->components->warn('Warnings ('.count($this->warnings).')');
 
             foreach ($this->warnings as $warning) {
                 $this->line("  ⚠ {$warning}");
@@ -48,7 +49,7 @@ class ValidateCommand extends Command
 
         if (! empty($this->issues)) {
             $this->newLine();
-            $this->components->error('Issues (' . count($this->issues) . ')');
+            $this->components->error('Issues ('.count($this->issues).')');
 
             foreach ($this->issues as $issue) {
                 $this->line("  ✗ {$issue}");
@@ -114,7 +115,7 @@ class ValidateCommand extends Command
 
     private function checkDuplicateAttachments(): void
     {
-        /** @var \Illuminate\Support\Collection<int, object{unit_id: int, cnt: int}> $duplicates */
+        /** @var Collection<int, object{unit_id: int, cnt: int}> $duplicates */
         $duplicates = UnitAttachment::whereNull('effective_to')
             ->selectRaw('unit_id, COUNT(*) as cnt')
             ->groupBy('unit_id')

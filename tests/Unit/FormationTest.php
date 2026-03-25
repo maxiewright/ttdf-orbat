@@ -5,6 +5,8 @@ use MaxieWright\TtdfOrbat\Enums\NodeType;
 use MaxieWright\TtdfOrbat\Enums\ServiceBranch;
 use MaxieWright\TtdfOrbat\Enums\UnitStatus;
 use MaxieWright\TtdfOrbat\Models\Formation;
+use MaxieWright\TtdfOrbat\Models\Rank;
+use MaxieWright\TtdfOrbat\Models\RankGrade;
 use MaxieWright\TtdfOrbat\Models\Unit;
 
 it('formation can be created with valid data', function () {
@@ -97,14 +99,14 @@ it('ranks and rankGrades relations are populated', function () {
         'is_active' => true,
     ]);
 
-    $grade = \MaxieWright\TtdfOrbat\Models\RankGrade::create([
+    $grade = RankGrade::create([
         'code' => 'OR-1',
         'category' => 'OR',
         'level' => 1,
         'label' => 'Private',
     ]);
 
-    $rank = \MaxieWright\TtdfOrbat\Models\Rank::create([
+    $rank = Rank::create([
         'formation_id' => $formation->id,
         'rank_grade_id' => $grade->id,
         'title' => 'Private',

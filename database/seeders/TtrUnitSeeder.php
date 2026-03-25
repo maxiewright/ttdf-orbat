@@ -25,6 +25,8 @@ class TtrUnitSeeder extends Seeder
 
             $attributes = array_merge($defaults, $data);
 
+            // parent_id is part of the key because abbreviations like "A COY"
+            // repeat across battalions. Use --fresh flag to handle reorganisations.
             $key = [
                 'formation_id' => $attributes['formation_id'],
                 'parent_id' => $attributes['parent_id'] ?? null,
@@ -84,10 +86,10 @@ class TtrUnitSeeder extends Seeder
 
         $this->seedInfantryBattalion($make, $bn2);
 
-        // ----- 3rd Battalion (Engineer) -----
+        // ----- 1st Engineer Battalion -----
         $bn3 = $make([
-            'name' => '3rd Battalion (Engineer) Trinidad and Tobago Regiment',
-            'abbreviation' => '3 TTR (ENG)',
+            'name' => '1st Engineer Battalion',
+            'abbreviation' => '1 Engr',
             'node_type' => NodeType::Battalion,
             'parent_id' => null,
             'sort_order' => 3,
@@ -117,10 +119,10 @@ class TtrUnitSeeder extends Seeder
             'sort_order' => 2,
         ]);
 
-        // ----- 4th Battalion (Support & Services) -----
+        // ----- Support and Service Battalion -----
         $bn4 = $make([
-            'name' => '4th Battalion (Support and Services) Trinidad and Tobago Regiment',
-            'abbreviation' => '4 TTR (SS)',
+            'name' => 'Support and Service Battalion',
+            'abbreviation' => 'SSB',
             'node_type' => NodeType::Battalion,
             'parent_id' => null,
             'sort_order' => 4,

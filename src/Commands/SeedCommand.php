@@ -3,6 +3,7 @@
 namespace MaxieWright\TtdfOrbat\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use MaxieWright\TtdfOrbat\Database\Seeders\TtdfOrbatSeeder;
 
 class SeedCommand extends Command
@@ -19,7 +20,7 @@ class SeedCommand extends Command
             $tables = ['unit_attachments', 'unit_details', 'units', 'ranks', 'rank_grades', 'formations'];
 
             foreach ($tables as $table) {
-                \Illuminate\Support\Facades\DB::table($table)->truncate();
+                DB::table($table)->truncate();
             }
         }
 

@@ -3,8 +3,8 @@
 namespace MaxieWright\TtdfOrbat\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\TestCase as Orchestra;
 use MaxieWright\TtdfOrbat\TtdfOrbatServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
@@ -26,7 +26,7 @@ class TestCase extends Orchestra
 
     protected function defineDatabaseMigrations(): void
     {
-        foreach (glob(__DIR__ . '/../database/migrations/*.php.stub') as $migration) {
+        foreach (glob(__DIR__.'/../database/migrations/*.php.stub') as $migration) {
             (include $migration)->up();
         }
     }
@@ -35,9 +35,9 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testing');
         config()->set('database.connections.testing', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
     }
 }

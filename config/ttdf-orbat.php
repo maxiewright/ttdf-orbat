@@ -2,7 +2,14 @@
 
 // config for MaxieWright/TtdfOrbat
 return [
-    'table_prefix' => '',
-    'use_filament' => false,
+    /*
+    |--------------------------------------------------------------------------
+    | Cache TTL
+    |--------------------------------------------------------------------------
+    |
+    | How long (in seconds) to cache ORBAT queries via the facade.
+    | Set to 0 to disable caching entirely.
+    |
+    */
     'cache_ttl' => 3600,
 ];

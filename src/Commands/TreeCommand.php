@@ -3,7 +3,6 @@
 namespace MaxieWright\TtdfOrbat\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 use MaxieWright\TtdfOrbat\Models\Formation;
 use MaxieWright\TtdfOrbat\Models\Unit;
 
@@ -79,7 +78,7 @@ class TreeCommand extends Command
 
         $children = $query->get();
 
-        $childPrefix = $prefix . ($currentDepth === 0 ? '' : ($isLast ? '    ' : '│   '));
+        $childPrefix = $prefix.($currentDepth === 0 ? '' : ($isLast ? '    ' : '│   '));
 
         foreach ($children as $index => $child) {
             /** @var Unit $child */

@@ -29,15 +29,17 @@ it('NodeType toArray returns value=>label pairs', function () {
 it('NodeType isNaval returns true only for naval types', function () {
     expect(NodeType::Base->isNaval())->toBeTrue();
     expect(NodeType::Vessel->isNaval())->toBeTrue();
-    expect(NodeType::Squadron->isNaval())->toBeTrue();
+    expect(NodeType::Flotilla->isNaval())->toBeTrue();
+    expect(NodeType::Station->isNaval())->toBeTrue();
 
     expect(NodeType::Battalion->isNaval())->toBeFalse();
     expect(NodeType::Platoon->isNaval())->toBeFalse();
     expect(NodeType::Flight->isNaval())->toBeFalse();
+    expect(NodeType::Squadron->isNaval())->toBeFalse();
 });
 
 it('NodeType isArmy returns false for naval and air types', function () {
-    collect([NodeType::Base, NodeType::Vessel, NodeType::Squadron, NodeType::Flight])
+    collect([NodeType::Base, NodeType::Vessel, NodeType::Flotilla, NodeType::Station, NodeType::Squadron, NodeType::Flight, NodeType::Wing])
         ->each(fn (NodeType $node) => expect($node->isArmy())->toBeFalse());
 });
 
