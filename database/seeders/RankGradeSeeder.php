@@ -12,6 +12,7 @@ class RankGradeSeeder extends Seeder
     {
         $grades = [
             // Other Ranks
+            ['code' => 'OR-1D', 'nato_code' => null, 'category' => RankCategory::OtherRanks, 'level' => 0, 'label' => 'Recruit-equivalent'],
             ['code' => 'OR-1', 'nato_code' => 'OR-1', 'category' => RankCategory::OtherRanks, 'level' => 1, 'label' => 'Private-equivalent'],
             ['code' => 'OR-2', 'nato_code' => 'OR-2', 'category' => RankCategory::OtherRanks, 'level' => 2, 'label' => 'Lance Corporal-equivalent'],
             ['code' => 'OR-3', 'nato_code' => 'OR-3', 'category' => RankCategory::OtherRanks, 'level' => 3, 'label' => 'Corporal-equivalent'],
