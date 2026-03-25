@@ -5,11 +5,11 @@ namespace MaxieWright\TtdfOrbat\Models;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use MaxieWright\TtdfOrbat\Enums\RankCategory;
-use MaxieWright\TtdfOrbat\Models\Formation;
-use MaxieWright\TtdfOrbat\Models\Rank;
 
 /**
  * @property int $id
@@ -21,6 +21,8 @@ use MaxieWright\TtdfOrbat\Models\Rank;
  */
 class RankGrade extends Model
 {
+    use HasFactory;
+
     protected $guarded = [];
 
     protected function casts(): array
@@ -35,11 +37,10 @@ class RankGrade extends Model
         return $this->hasMany(Rank::class);
     }
 
-    /** @return Rank|null */
     public function titleFor(Formation $formation): ?Rank
     {
         if ($this->relationLoaded('ranks')) {
-            /** @var \Illuminate\Database\Eloquent\Collection<int, Rank> $ranks */
+            /** @var Collection<int, Rank> $ranks */
             $ranks = $this->ranks;
 
             /** @var Rank|null */

@@ -35,7 +35,11 @@ class TtdfOrbatServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->publishes([
-            __DIR__ . '/../database/seeders' => database_path('seeders/vendor/ttdf-orbat'),
+            __DIR__.'/../database/seeders' => database_path('seeders/vendor/ttdf-orbat'),
         ], "{$this->package->shortName()}-seeders");
+
+        $this->publishes([
+            __DIR__.'/../database/factories' => database_path('factories/vendor/ttdf-orbat'),
+        ], "{$this->package->shortName()}-factories");
     }
 }

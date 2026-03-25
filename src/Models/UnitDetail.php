@@ -5,8 +5,10 @@ namespace MaxieWright\TtdfOrbat\Models;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Carbon;
 use MaxieWright\TtdfOrbat\Enums\VesselType;
 
 /**
@@ -19,8 +21,8 @@ use MaxieWright\TtdfOrbat\Enums\VesselType;
  * @property string|null $pennant_prefix
  * @property int|null $displacement_tons
  * @property int|null $crew_complement
- * @property \Illuminate\Support\Carbon|null $commissioned_at
- * @property \Illuminate\Support\Carbon|null $decommissioned_at
+ * @property Carbon|null $commissioned_at
+ * @property Carbon|null $decommissioned_at
  * @property string|null $base_location
  * @property string|null $base_type
  * @property string|null $grid_reference
@@ -29,6 +31,8 @@ use MaxieWright\TtdfOrbat\Enums\VesselType;
  */
 class UnitDetail extends Model
 {
+    use HasFactory;
+
     protected $guarded = [];
 
     protected function casts(): array

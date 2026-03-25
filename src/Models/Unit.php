@@ -5,12 +5,14 @@ namespace MaxieWright\TtdfOrbat\Models;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use MaxieWright\TtdfOrbat\Enums\NodeType;
 use MaxieWright\TtdfOrbat\Enums\ServiceBranch;
 use MaxieWright\TtdfOrbat\Enums\UnitStatus;
@@ -27,14 +29,15 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
  * @property string|null $designation
  * @property UnitStatus $status
  * @property int $sort_order
- * @property \Illuminate\Support\Carbon|null $activated_at
- * @property \Illuminate\Support\Carbon|null $deactivated_at
+ * @property Carbon|null $activated_at
+ * @property Carbon|null $deactivated_at
  * @property-read Unit|null $parent
  * @property-read UnitDetail|null $detail
  * @property-read UnitAttachment|null $currentAttachment
  */
 class Unit extends Model
 {
+    use HasFactory;
     use HasRecursiveRelationships;
     use SoftDeletes;
 
