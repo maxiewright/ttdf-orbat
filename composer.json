@@ -43,7 +43,8 @@
     "autoload": {
         "psr-4": {
             "MaxieWright\\TtdfOrbat\\": "src/",
-            "MaxieWright\\TtdfOrbat\\Database\\Factories\\": "database/factories/"
+            "MaxieWright\\TtdfOrbat\\Database\\Factories\\": "database/factories/",
+            "MaxieWright\\TtdfOrbat\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {

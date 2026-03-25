@@ -24,14 +24,15 @@ class TestCase extends Orchestra
         ];
     }
 
+    protected function defineDatabaseMigrations(): void
+    {
+        foreach (glob(__DIR__ . '/../database/migrations/*.php.stub') as $migration) {
+            (include $migration)->up();
+        }
+    }
+
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
-
-        /*
-         foreach (\Illuminate\Support\Facades\File::allFiles(__DIR__ . '/../database/migrations') as $migration) {
-            (include $migration->getRealPath())->up();
-         }
-         */
     }
 }
