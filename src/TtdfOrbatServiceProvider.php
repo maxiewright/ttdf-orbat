@@ -2,7 +2,10 @@
 
 namespace MaxieWright\TtdfOrbat;
 
-use MaxieWright\TtdfOrbat\Database\Seeders\TtdfOrbatSeeder;
+use MaxieWright\TtdfOrbat\Commands\SeedCommand;
+use MaxieWright\TtdfOrbat\Commands\StatsCommand;
+use MaxieWright\TtdfOrbat\Commands\TreeCommand;
+use MaxieWright\TtdfOrbat\Commands\ValidateCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -20,6 +23,12 @@ class TtdfOrbatServiceProvider extends PackageServiceProvider
                 'create_units_table',
                 'create_unit_details_table',
                 'create_unit_attachments_table',
+            ])
+            ->hasCommands([
+                SeedCommand::class,
+                StatsCommand::class,
+                TreeCommand::class,
+                ValidateCommand::class,
             ]);
     }
 

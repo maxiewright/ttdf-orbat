@@ -39,8 +39,11 @@ class RankGrade extends Model
     public function titleFor(Formation $formation): ?Rank
     {
         if ($this->relationLoaded('ranks')) {
+            /** @var \Illuminate\Database\Eloquent\Collection<int, Rank> $ranks */
+            $ranks = $this->ranks;
+
             /** @var Rank|null */
-            return $this->ranks->first(fn (Rank $rank) => $rank->formation_id === $formation->id);
+            return $ranks->first(fn (Rank $rank) => $rank->formation_id === $formation->id);
         }
 
         /** @var Rank|null */
