@@ -68,28 +68,33 @@ it('TTAG skips OF-D1 grade and covers all others', function () {
     }
 });
 
-it('TTR unit tree contains RHQ and 4 battalions at top level', function () {
+it('TTR has one top-level unit with 4 battalion children', function () {
     $this->seed(TtdfOrbatSeeder::class);
 
     $formation = Formation::where('abbreviation', 'TTR')->firstOrFail();
 
-    expect(Unit::forFormation($formation)->topLevel()->count())->toBe(5);
+    $topLevel = Unit::forFormation($formation)->topLevel()->get();
+    expect($topLevel)->toHaveCount(1);
+    expect($topLevel->first()->abbreviation)->toBe('TTR');
+
+    $battalions = $topLevel->first()->children;
+    expect($battalions)->toHaveCount(4);
 });
 
 it('seeder is idempotent — running twice produces same count', function () {
     $this->seed(TtdfOrbatSeeder::class);
 
-    $count = Formation::count();
+    $count = Unit::count();
 
     $this->seed(TtdfOrbatSeeder::class);
 
-    expect(Formation::count())->toBe($count);
+    expect(Unit::count())->toBe($count);
 });
 
-it('Tobago Detachment has organic parent set to 1 TTR', function () {
+it('SFOD is organic to 1st Infantry Battalion', function () {
     $this->seed(TtdfOrbatSeeder::class);
 
-    $detachment = Unit::where('abbreviation', 'TOB DET')->firstOrFail();
+    $sfod = Unit::where('designation', 'SFOD')->firstOrFail();
 
-    expect($detachment->parent->abbreviation)->toBe('1TTR');
+    expect($sfod->parent->abbreviation)->toBe('1TTR');
 });

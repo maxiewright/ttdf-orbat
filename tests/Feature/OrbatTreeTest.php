@@ -11,54 +11,56 @@ use MaxieWright\TtdfOrbat\Models\UnitAttachment;
 it('descendants returns all nested children recursively', function () {
     $this->seed(TtdfOrbatSeeder::class);
 
-    $battalion = Unit::where('abbreviation', '1TTR')->firstOrFail();
+    $battalion = Unit::where('designation', '1TTR')->firstOrFail();
 
     $descendants = $battalion->descendants;
 
-    expect($descendants->pluck('abbreviation'))->toContain('A COY');
+    expect($descendants->pluck('abbreviation'))->toContain('A Coy');
     expect($descendants->contains(fn (Unit $unit) => $unit->node_type === NodeType::Platoon))->toBeTrue();
 });
 
 it('ancestors returns full chain to root', function () {
     $this->seed(TtdfOrbatSeeder::class);
 
-    $platoon = Unit::where('abbreviation', '1 PL')->firstOrFail();
+    $platoon = Unit::where('designation', 'HQACOYACOY1TTR')->firstOrFail();
 
     $ancestors = $platoon->ancestors;
 
-    expect($ancestors->pluck('abbreviation'))->toContain('A COY');
+    expect($ancestors->pluck('abbreviation'))->toContain('A Coy');
     expect($ancestors->pluck('abbreviation'))->toContain('1TTR');
+    expect($ancestors->pluck('abbreviation'))->toContain('TTR');
 });
 
 it('breadcrumb accessor returns formatted string', function () {
     $this->seed(TtdfOrbatSeeder::class);
 
-    $platoon = Unit::where('abbreviation', '1 PL')->firstOrFail();
+    $platoon = Unit::where('designation', '1PLATOONACOY1TTR')->firstOrFail();
 
-    expect(str_contains($platoon->breadcrumb, '>'))->toBeTrue();
+    expect($platoon->breadcrumb)->toContain('>');
+    expect($platoon->breadcrumb)->toContain('1TTR');
 });
 
 it('effectiveParent returns organic parent with no attachment', function () {
     $this->seed(TtdfOrbatSeeder::class);
 
-    $platoon = Unit::where('abbreviation', 'RECCE PL')->firstOrFail();
+    $platoon = Unit::where('designation', '1PLATOONACOY1TTR')->firstOrFail();
 
-    expect($platoon->effectiveParent->abbreviation)->toBe('SP COY');
+    expect($platoon->effectiveParent->abbreviation)->toBe('A Coy');
 });
 
 it('effectiveParent returns attached unit when active attachment exists', function () {
     $this->seed(TtdfOrbatSeeder::class);
 
-    $detachment = Unit::where('abbreviation', 'TOB DET')->firstOrFail();
-    $target = Unit::where('abbreviation', '2 TTR')->firstOrFail();
+    $sfod = Unit::where('designation', 'SFOD')->firstOrFail();
+    $target = Unit::where('designation', '2TTR')->firstOrFail();
 
     UnitAttachment::create([
-        'unit_id' => $detachment->id,
+        'unit_id' => $sfod->id,
         'attached_to_id' => $target->id,
         'effective_from' => now(),
     ]);
 
-    expect($detachment->fresh()->effectiveParent->abbreviation)->toBe('2 TTR');
+    expect($sfod->fresh()->effectiveParent->abbreviation)->toBe('2TTR');
 });
 
 it('forService scope returns only army units for ServiceBranch::Army', function () {

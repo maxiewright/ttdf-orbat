@@ -2,7 +2,6 @@
 
 namespace MaxieWright\TtdfOrbat\Database\Seeders;
 
-use Closure;
 use Illuminate\Database\Seeder;
 use MaxieWright\TtdfOrbat\Enums\NodeType;
 use MaxieWright\TtdfOrbat\Enums\ServiceBranch;
@@ -12,240 +11,247 @@ use MaxieWright\TtdfOrbat\Models\Unit;
 
 class TtrUnitSeeder extends Seeder
 {
+    private Formation $formation;
+
     public function run(): void
     {
-        $formation = Formation::where('abbreviation', 'TTR')->firstOrFail();
+        $this->formation = Formation::where('abbreviation', 'TTR')->firstOrFail();
 
-        $make = function (array $data) use ($formation): Unit {
-            $defaults = [
-                'formation_id' => $formation->id,
-                'service_branch' => ServiceBranch::Army,
-                'status' => UnitStatus::Active,
-            ];
-
-            $attributes = array_merge($defaults, $data);
-
-            // parent_id is part of the key because abbreviations like "A COY"
-            // repeat across battalions. Use --fresh flag to handle reorganisations.
-            $key = [
-                'formation_id' => $attributes['formation_id'],
-                'parent_id' => $attributes['parent_id'] ?? null,
-                'abbreviation' => $attributes['abbreviation'],
-            ];
-
-            return Unit::updateOrCreate($key, $attributes);
-        };
-
-        // ----- Regiment HQ -----
-        $rhq = $make([
-            'name' => 'Regiment Headquarters',
-            'abbreviation' => 'RHQ',
-            'node_type' => NodeType::Headquarters,
+        // ----- Regiment -----
+        $ttr = $this->make('TTR', [
+            'name' => 'Trinidad and Tobago Regiment',
+            'abbreviation' => 'TTR',
+            'node_type' => NodeType::Formation,
             'parent_id' => null,
             'sort_order' => 0,
         ]);
 
-        foreach (['G1', 'G2', 'G3', 'G4', 'G5'] as $i => $branch) {
-            $make([
-                'name' => "{$branch} Branch",
-                'abbreviation' => $branch,
-                'node_type' => NodeType::Branch,
-                'parent_id' => $rhq->id,
-                'sort_order' => $i + 1,
-            ]);
-        }
-
-        // ----- 1st Battalion -----
-        $bn1 = $make([
-            'name' => '1st Battalion Trinidad and Tobago Regiment',
-            'abbreviation' => '1TTR',
+        // ----- Battalions -----
+        $engr = $this->make('1ENG', [
+            'name' => '1st Engineer Battalion',
+            'abbreviation' => '1Engr',
             'node_type' => NodeType::Battalion,
-            'parent_id' => null,
+            'parent_id' => $ttr->id,
             'sort_order' => 1,
         ]);
 
-        $this->seedInfantryBattalion($make, $bn1);
+        $bn1 = $this->make('1TTR', [
+            'name' => '1st Infantry Battalion',
+            'abbreviation' => '1TTR',
+            'node_type' => NodeType::Battalion,
+            'parent_id' => $ttr->id,
+            'sort_order' => 2,
+        ]);
 
-        // Tobago Detachment (organic to 1TTR)
-        $make([
-            'name' => 'Tobago Detachment',
-            'abbreviation' => 'TOB DET',
+        $bn2 = $this->make('2TTR', [
+            'name' => '2nd Infantry Battalion',
+            'abbreviation' => '2TTR',
+            'node_type' => NodeType::Battalion,
+            'parent_id' => $ttr->id,
+            'sort_order' => 3,
+        ]);
+
+        $ssb = $this->make('SSB', [
+            'name' => 'Support and Service Battalion',
+            'abbreviation' => 'SSB',
+            'node_type' => NodeType::Battalion,
+            'parent_id' => $ttr->id,
+            'sort_order' => 4,
+        ]);
+
+        // ----- 1st Engineer Battalion sub-units -----
+        $this->make('SUPTSQN1ENG', [
+            'name' => 'Support Squadron',
+            'abbreviation' => 'Spt Sqn',
+            'node_type' => NodeType::Squadron,
+            'parent_id' => $engr->id,
+            'sort_order' => 1,
+        ]);
+
+        $this->make('FLDCONSSQN1ENG', [
+            'name' => 'Field and Construction Squadron',
+            'abbreviation' => 'Fld Con Sqn',
+            'node_type' => NodeType::Squadron,
+            'parent_id' => $engr->id,
+            'sort_order' => 2,
+        ]);
+
+        $this->make('EMESQN1ENG', [
+            'name' => 'Electrical and Mechanical Engineering Squadron',
+            'abbreviation' => 'EME Sqn',
+            'node_type' => NodeType::Squadron,
+            'parent_id' => $engr->id,
+            'sort_order' => 3,
+        ]);
+
+        // ----- 1st Infantry Battalion sub-units -----
+        $this->make('RHQ', [
+            'name' => 'Trinidad and Tobago Regiment Headquarters',
+            'abbreviation' => 'RHQ 1TTR',
+            'node_type' => NodeType::Headquarters,
+            'parent_id' => $bn1->id,
+            'sort_order' => 0,
+        ]);
+
+        $this->make('HQCOY1TTR', [
+            'name' => 'Headquarter Company - 1st Infantry Battalion',
+            'abbreviation' => 'HQ 1TTR',
+            'node_type' => NodeType::Company,
+            'parent_id' => $bn1->id,
+            'sort_order' => 1,
+        ]);
+
+        $aCoy = $this->make('ACOY1TTR', [
+            'name' => 'Alpha Company',
+            'abbreviation' => 'A Coy',
+            'node_type' => NodeType::Company,
+            'parent_id' => $bn1->id,
+            'sort_order' => 2,
+        ]);
+
+        $bCoy = $this->make('BCOY1TTR', [
+            'name' => 'Bravo Company',
+            'abbreviation' => 'B Coy',
+            'node_type' => NodeType::Company,
+            'parent_id' => $bn1->id,
+            'sort_order' => 3,
+        ]);
+
+        $cCoy = $this->make('CCOY1TTR', [
+            'name' => 'Charlie Company',
+            'abbreviation' => 'C Coy',
+            'node_type' => NodeType::Company,
+            'parent_id' => $bn1->id,
+            'sort_order' => 4,
+        ]);
+
+        $this->make('SFOD', [
+            'name' => 'Special Forces Operations Detachment',
+            'abbreviation' => 'SFOD',
             'node_type' => NodeType::Detachment,
             'parent_id' => $bn1->id,
             'sort_order' => 5,
         ]);
 
-        // ----- 2nd Battalion -----
-        $bn2 = $make([
-            'name' => '2nd Battalion Trinidad and Tobago Regiment',
-            'abbreviation' => '2 TTR',
-            'node_type' => NodeType::Battalion,
-            'parent_id' => null,
-            'sort_order' => 2,
-        ]);
-
-        $this->seedInfantryBattalion($make, $bn2);
-
-        // ----- 1st Engineer Battalion -----
-        $bn3 = $make([
-            'name' => '1st Engineer Battalion',
-            'abbreviation' => '1 Engr',
-            'node_type' => NodeType::Battalion,
-            'parent_id' => null,
-            'sort_order' => 3,
-        ]);
-
-        $make([
-            'name' => 'Headquarters Squadron',
-            'abbreviation' => 'HQ SQN',
+        // ----- 2nd Infantry Battalion sub-units -----
+        $this->make('HQCOY2TTR', [
+            'name' => 'Headquarter Company - 2nd Infantry Battalion',
+            'abbreviation' => 'HQ 2TTR',
             'node_type' => NodeType::Company,
-            'parent_id' => $bn3->id,
+            'parent_id' => $bn2->id,
             'sort_order' => 0,
         ]);
 
-        $make([
-            'name' => '1 Field Squadron',
-            'abbreviation' => '1 FD SQN',
+        $eCoy = $this->make('ECOY2TTR', [
+            'name' => 'Echo Company',
+            'abbreviation' => 'E Coy',
             'node_type' => NodeType::Company,
-            'parent_id' => $bn3->id,
+            'parent_id' => $bn2->id,
             'sort_order' => 1,
         ]);
 
-        $make([
-            'name' => '2 Field Squadron',
-            'abbreviation' => '2 FD SQN',
+        $fCoy = $this->make('FCOY2TTR', [
+            'name' => 'Foxtrot Company',
+            'abbreviation' => 'F Coy',
             'node_type' => NodeType::Company,
-            'parent_id' => $bn3->id,
+            'parent_id' => $bn2->id,
             'sort_order' => 2,
         ]);
 
-        // ----- Support and Service Battalion -----
-        $bn4 = $make([
-            'name' => 'Support and Service Battalion',
-            'abbreviation' => 'SSB',
-            'node_type' => NodeType::Battalion,
-            'parent_id' => null,
+        $gCoy = $this->make('GCOY2TTR', [
+            'name' => 'Gulf Company',
+            'abbreviation' => 'G Coy',
+            'node_type' => NodeType::Company,
+            'parent_id' => $bn2->id,
+            'sort_order' => 3,
+        ]);
+
+        $this->make('SPWPNS', [
+            'name' => 'Support Weapons Operations Detachment',
+            'abbreviation' => 'Sp Wpns',
+            'node_type' => NodeType::Detachment,
+            'parent_id' => $bn2->id,
             'sort_order' => 4,
         ]);
 
-        $make([
-            'name' => 'Headquarters Company',
-            'abbreviation' => 'HQ COY',
+        // ----- Support and Service Battalion sub-units -----
+        $this->make('HQSSB', [
+            'name' => 'Headquarter Company - Support and Service Battalion',
+            'abbreviation' => 'HQ SSB',
             'node_type' => NodeType::Company,
-            'parent_id' => $bn4->id,
+            'parent_id' => $ssb->id,
             'sort_order' => 0,
         ]);
 
-        $make([
-            'name' => 'Ordnance Company',
-            'abbreviation' => 'ORD COY',
+        $this->make('STSCOYSSB', [
+            'name' => 'Supply and Transport Company - Support and Service Battalion',
+            'abbreviation' => 'S&T Coy',
             'node_type' => NodeType::Company,
-            'parent_id' => $bn4->id,
+            'parent_id' => $ssb->id,
             'sort_order' => 1,
         ]);
 
-        $make([
-            'name' => 'Transport Company',
-            'abbreviation' => 'TPT COY',
+        $this->make('MNCOYSSB', [
+            'name' => 'Maintenance Company - Support and Service Battalion',
+            'abbreviation' => 'Mn Coy',
             'node_type' => NodeType::Company,
-            'parent_id' => $bn4->id,
+            'parent_id' => $ssb->id,
             'sort_order' => 2,
         ]);
 
-        $make([
-            'name' => 'Catering Company',
-            'abbreviation' => 'CAT COY',
-            'node_type' => NodeType::Company,
-            'parent_id' => $bn4->id,
-            'sort_order' => 3,
-        ]);
-    }
-
-    private function seedInfantryBattalion(Closure $make, Unit $battalion): void
-    {
-        // HQ Company
-        $hqCoy = $make([
-            'name' => 'Headquarters Company',
-            'abbreviation' => 'HQ COY',
-            'node_type' => NodeType::Company,
-            'parent_id' => $battalion->id,
-            'sort_order' => 0,
-        ]);
-
-        $make([
-            'name' => 'Signals Department',
-            'abbreviation' => 'SIGS DEPT',
-            'node_type' => NodeType::Department,
-            'parent_id' => $hqCoy->id,
-            'sort_order' => 1,
-        ]);
-
-        $make([
-            'name' => 'Administration Department',
-            'abbreviation' => 'ADMIN DEPT',
-            'node_type' => NodeType::Department,
-            'parent_id' => $hqCoy->id,
-            'sort_order' => 2,
-        ]);
-
-        $make([
-            'name' => 'Motor Transport Department',
-            'abbreviation' => 'MT DEPT',
-            'node_type' => NodeType::Department,
-            'parent_id' => $hqCoy->id,
-            'sort_order' => 3,
-        ]);
-
-        // Rifle Companies
-        $rifleCompanies = [
-            ['name' => 'A Company', 'abbreviation' => 'A COY', 'sort_order' => 1],
-            ['name' => 'B Company', 'abbreviation' => 'B COY', 'sort_order' => 2],
-            ['name' => 'C Company', 'abbreviation' => 'C COY', 'sort_order' => 3],
+        // ----- Platoons -----
+        $platoons = [
+            'ACOY1TTR' => [$aCoy, ['HQ A Coy', '1 Platoon', '2 Platoon', '3 Platoon']],
+            'BCOY1TTR' => [$bCoy, ['HQ B Coy', '4 Platoon', '5 Platoon', '6 Platoon']],
+            'CCOY1TTR' => [$cCoy, ['HQ C Coy', '7 Platoon', '8 Platoon', '9 Platoon']],
+            'ECOY2TTR' => [$eCoy, ['HQ E Coy', '13 Platoon', '14 Platoon', '15 Platoon']],
+            'FCOY2TTR' => [$fCoy, ['HQ F Coy', '16 Platoon', '17 Platoon', '18 Platoon']],
+            'GCOY2TTR' => [$gCoy, ['HQ G Coy', '19 Platoon', '20 Platoon', '21 Platoon']],
         ];
 
-        foreach ($rifleCompanies as $coData) {
-            $company = $make([
-                'name' => $coData['name'],
-                'abbreviation' => $coData['abbreviation'],
-                'node_type' => NodeType::Company,
-                'parent_id' => $battalion->id,
-                'sort_order' => $coData['sort_order'],
-            ]);
+        foreach ($platoons as $companyCode => [$company, $names]) {
+            foreach ($names as $order => $name) {
+                $code = strtoupper(preg_replace('/[^A-Z0-9]/i', '', $name.$companyCode));
 
-            for ($pl = 1; $pl <= 3; $pl++) {
-                $make([
-                    'name' => "{$pl} Platoon",
-                    'abbreviation' => "{$pl} PL",
+                $this->make($code, [
+                    'name' => $name.' - '.$company->name,
+                    'abbreviation' => $this->platoonAbbreviation($name),
                     'node_type' => NodeType::Platoon,
                     'parent_id' => $company->id,
-                    'sort_order' => $pl,
+                    'sort_order' => $order,
                 ]);
             }
         }
+    }
 
-        // Support Company
-        $spCoy = $make([
-            'name' => 'Support Company',
-            'abbreviation' => 'SP COY',
-            'node_type' => NodeType::Company,
-            'parent_id' => $battalion->id,
-            'sort_order' => 4,
-        ]);
+    private function make(string $code, array $data): Unit
+    {
+        $attributes = array_merge([
+            'formation_id' => $this->formation->id,
+            'service_branch' => ServiceBranch::Army,
+            'status' => UnitStatus::Active,
+            'designation' => $code,
+        ], $data);
 
-        $supportPlatoons = [
-            ['name' => 'Mortar Platoon', 'abbreviation' => 'MOR PL', 'sort_order' => 1],
-            ['name' => 'Reconnaissance Platoon', 'abbreviation' => 'RECCE PL', 'sort_order' => 2],
-            ['name' => 'Pioneer Platoon', 'abbreviation' => 'PNR PL', 'sort_order' => 3],
-        ];
+        return Unit::updateOrCreate(
+            [
+                'formation_id' => $attributes['formation_id'],
+                'designation' => $code,
+            ],
+            $attributes,
+        );
+    }
 
-        foreach ($supportPlatoons as $plData) {
-            $make([
-                'name' => $plData['name'],
-                'abbreviation' => $plData['abbreviation'],
-                'node_type' => NodeType::Platoon,
-                'parent_id' => $spCoy->id,
-                'sort_order' => $plData['sort_order'],
-            ]);
+    private function platoonAbbreviation(string $name): string
+    {
+        if (preg_match('/^(\d+)\s+Platoon$/i', $name, $matches)) {
+            return $matches[1].' Plt';
         }
+
+        if (preg_match('/^HQ\s+([A-Z])\s+Coy$/i', $name, $matches)) {
+            return 'HQ '.strtoupper($matches[1]).' Coy';
+        }
+
+        return $name;
     }
 }

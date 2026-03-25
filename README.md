@@ -147,25 +147,34 @@ Each formation has 16 ranks (skipping one grade that doesn't apply to their serv
 The Regiment unit seeder provides:
 
 ```
-RHQ (Regiment Headquarters)
-  G1 Branch, G2 Branch, G3 Branch, G4 Branch, G5 Branch
-
-1TTR (1st Battalion)
-  HQ COY > SIGS DEPT, ADMIN DEPT, MT DEPT
-  A COY > 1 PL, 2 PL, 3 PL
-  B COY > 1 PL, 2 PL, 3 PL
-  C COY > 1 PL, 2 PL, 3 PL
-  SP COY > MOR PL, RECCE PL, PNR PL
-  TOB DET (Tobago Detachment)
-
-2 TTR (2nd Battalion)
-  (same structure as 1TTR)
-
-1 Engr (1st Engineer Battalion)
-  HQ SQN, 1 FD SQN, 2 FD SQN
-
-SSB (Support and Service Battalion)
-  HQ COY, ORD COY, TPT COY, CAT COY
+TTR (Trinidad and Tobago Regiment)
+├── 1Engr (1st Engineer Battalion)
+│   ├── Spt Sqn (Support Squadron)
+│   ├── Fld Con Sqn (Field and Construction Squadron)
+│   └── EME Sqn (Electrical and Mechanical Engineering Squadron)
+├── 1TTR (1st Infantry Battalion)
+│   ├── RHQ 1TTR (Regiment Headquarters)
+│   ├── HQ 1TTR (Headquarter Company)
+│   ├── A Coy (Alpha Company)
+│   │   ├── HQ A Coy, 1 Plt, 2 Plt, 3 Plt
+│   ├── B Coy (Bravo Company)
+│   │   ├── HQ B Coy, 4 Plt, 5 Plt, 6 Plt
+│   ├── C Coy (Charlie Company)
+│   │   ├── HQ C Coy, 7 Plt, 8 Plt, 9 Plt
+│   └── SFOD (Special Forces Operations Detachment)
+├── 2TTR (2nd Infantry Battalion)
+│   ├── HQ 2TTR (Headquarter Company)
+│   ├── E Coy (Echo Company)
+│   │   ├── HQ E Coy, 13 Plt, 14 Plt, 15 Plt
+│   ├── F Coy (Foxtrot Company)
+│   │   ├── HQ F Coy, 16 Plt, 17 Plt, 18 Plt
+│   ├── G Coy (Gulf Company)
+│   │   ├── HQ G Coy, 19 Plt, 20 Plt, 21 Plt
+│   └── Sp Wpns (Support Weapons Operations Detachment)
+└── SSB (Support and Service Battalion)
+    ├── HQ SSB (Headquarter Company)
+    ├── S&T Coy (Supply and Transport Company)
+    └── Mn Coy (Maintenance Company)
 ```
 
 ## Artisan Commands
