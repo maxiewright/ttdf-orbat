@@ -20,6 +20,9 @@ class TtrRankSeeder extends Seeder
             ['grade_code' => 'OR-3', 'title' => 'Corporal', 'abbreviation' => 'Cpl'],
             ['grade_code' => 'OR-4', 'title' => 'Sergeant', 'abbreviation' => 'Sgt'],
             ['grade_code' => 'OR-5', 'title' => 'Staff Sergeant', 'abbreviation' => 'SSgt'],
+            // Reserve placeholders to keep OR-6/OR-7 coverage until active equivalents exist.
+            ['grade_code' => 'OR-6', 'title' => 'Colour Sergeant (Reserve placeholder)', 'abbreviation' => 'C/Sgt'],
+            ['grade_code' => 'OR-7', 'title' => 'Reserve Grade (placeholder)', 'abbreviation' => 'Res'],
             ['grade_code' => 'WO-1', 'title' => 'Warrant Officer Class II', 'abbreviation' => 'WO2'],
             ['grade_code' => 'WO-2', 'title' => 'Warrant Officer Class I', 'abbreviation' => 'WO1'],
             ['grade_code' => 'OF-1D', 'title' => 'Officer Cadet', 'abbreviation' => 'OCdt'],

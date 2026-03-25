@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use MaxieWright\TtdfOrbat\Enums\RankCategory;
+use MaxieWright\TtdfOrbat\Models\Formation;
+use MaxieWright\TtdfOrbat\Models\Rank;
 
 /**
  * @property int $id
@@ -36,6 +38,11 @@ class RankGrade extends Model
     /** @return Rank|null */
     public function titleFor(Formation $formation): ?Rank
     {
+        if ($this->relationLoaded('ranks')) {
+            /** @var Rank|null */
+            return $this->ranks->first(fn (Rank $rank) => $rank->formation_id === $formation->id);
+        }
+
         /** @var Rank|null */
         return $this->ranks()->where('formation_id', $formation->id)->first();
     }

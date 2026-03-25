@@ -56,7 +56,7 @@ class TtrUnitSeeder extends Seeder
         // ----- 1st Battalion -----
         $bn1 = $make([
             'name' => '1st Battalion Trinidad and Tobago Regiment',
-            'abbreviation' => '1 TTR',
+            'abbreviation' => '1TTR',
             'node_type' => NodeType::Battalion,
             'parent_id' => null,
             'sort_order' => 1,
@@ -64,7 +64,7 @@ class TtrUnitSeeder extends Seeder
 
         $this->seedInfantryBattalion($make, $bn1);
 
-        // Tobago Detachment (organic to 1 TTR)
+        // Tobago Detachment (organic to 1TTR)
         $make([
             'name' => 'Tobago Detachment',
             'abbreviation' => 'TOB DET',

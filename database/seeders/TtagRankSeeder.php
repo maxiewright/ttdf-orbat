@@ -20,6 +20,9 @@ class TtagRankSeeder extends Seeder
             ['grade_code' => 'OR-3', 'title' => 'Corporal', 'abbreviation' => 'Cpl'],
             ['grade_code' => 'OR-4', 'title' => 'Sergeant', 'abbreviation' => 'Sgt'],
             ['grade_code' => 'OR-5', 'title' => 'Flight Sergeant', 'abbreviation' => 'FS'],
+            // Temporary placeholders covering OR-6/OR-7 until the Air Guard formalises equivalent ranks.
+            ['grade_code' => 'OR-6', 'title' => 'Senior Flight Sergeant (placeholder)', 'abbreviation' => 'SFS'],
+            ['grade_code' => 'OR-7', 'title' => 'Reserve Senior Flight Sergeant (placeholder)', 'abbreviation' => 'RSF'],
             ['grade_code' => 'WO-1', 'title' => 'Warrant Officer Class II', 'abbreviation' => 'WO2'],
             ['grade_code' => 'WO-2', 'title' => 'Warrant Officer Class I', 'abbreviation' => 'WO1'],
             ['grade_code' => 'OF-1D', 'title' => 'Officer Cadet', 'abbreviation' => 'OCdt'],

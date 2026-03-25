@@ -20,6 +20,9 @@ class TtcgRankSeeder extends Seeder
             ['grade_code' => 'OR-3', 'title' => 'Leading Rating', 'abbreviation' => 'LR'],
             ['grade_code' => 'OR-4', 'title' => 'Petty Officer', 'abbreviation' => 'PO'],
             ['grade_code' => 'OR-5', 'title' => 'Acting Chief Petty Officer', 'abbreviation' => 'ACPO'],
+            // Placeholder entries ensuring OR-6/OR-7 remain available if Coast Guard introduces equivalents.
+            ['grade_code' => 'OR-6', 'title' => 'Colour Petty Officer (Reserve placeholder)', 'abbreviation' => 'CPO(R)'],
+            ['grade_code' => 'OR-7', 'title' => 'Reserve Petty Officer (placeholder)', 'abbreviation' => 'ResCPO'],
             ['grade_code' => 'WO-1', 'title' => 'Chief Petty Officer', 'abbreviation' => 'CPO'],
             ['grade_code' => 'WO-2', 'title' => 'Fleet Chief Petty Officer', 'abbreviation' => 'FCPO'],
             ['grade_code' => 'OF-1D', 'title' => 'Midshipman', 'abbreviation' => 'Mid'],

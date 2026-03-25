@@ -22,6 +22,25 @@ enum NodeType: string
     case Installation = 'installation';
     case Unit = 'unit';
 
+    private const NAVAL_TYPES = [
+        self::Base,
+        self::Vessel,
+        self::Squadron,
+    ];
+
+    private const AIR_TYPES = [
+        self::Squadron,
+        self::Flight,
+    ];
+
+    private const ARMY_TYPES = [
+        self::Battalion,
+        self::Company,
+        self::Platoon,
+        self::Section,
+        self::Detachment,
+    ];
+
     public function label(): string
     {
         return match ($this) {
@@ -47,17 +66,17 @@ enum NodeType: string
 
     public function isNaval(): bool
     {
-        return in_array($this, [self::Base, self::Vessel, self::Squadron]);
+        return in_array($this, self::NAVAL_TYPES, true);
     }
 
     public function isAir(): bool
     {
-        return in_array($this, [self::Squadron, self::Flight]);
+        return in_array($this, self::AIR_TYPES, true);
     }
 
     public function isArmy(): bool
     {
-        return in_array($this, [self::Battalion, self::Company, self::Platoon, self::Section]);
+        return in_array($this, self::ARMY_TYPES, true);
     }
 
     public static function toArray(): array
