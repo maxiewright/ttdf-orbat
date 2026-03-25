@@ -2,6 +2,7 @@
 
 namespace MaxieWright\TtdfOrbat;
 
+use MaxieWright\TtdfOrbat\Database\Seeders\TtdfOrbatSeeder;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -20,5 +21,12 @@ class TtdfOrbatServiceProvider extends PackageServiceProvider
                 'create_unit_details_table',
                 'create_unit_attachments_table',
             ]);
+    }
+
+    public function packageBooted(): void
+    {
+        $this->publishes([
+            __DIR__ . '/../database/seeders' => database_path('seeders/vendor/ttdf-orbat'),
+        ], "{$this->package->shortName()}-seeders");
     }
 }
