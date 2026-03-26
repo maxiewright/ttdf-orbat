@@ -5,6 +5,7 @@ namespace MaxieWright\TtdfOrbat\Models;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -17,6 +18,7 @@ use MaxieWright\TtdfOrbat\Enums\FormationType;
  * @property string $abbreviation
  * @property FormationType $type
  * @property bool $is_active
+ * @property-read Collection<int, Appointment> $appointments
  */
 class Formation extends Model
 {
@@ -47,6 +49,11 @@ class Formation extends Model
     public function ranks(): HasMany
     {
         return $this->hasMany(Rank::class);
+    }
+
+    public function appointments(): HasManyThrough
+    {
+        return $this->hasManyThrough(Appointment::class, Unit::class);
     }
 
     public function rankGrades(): HasManyThrough

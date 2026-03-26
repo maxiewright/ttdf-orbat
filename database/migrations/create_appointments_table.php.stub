@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('appointments', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('unit_id')->constrained('units')->cascadeOnDelete();
+            $table->foreignId('min_rank_grade_id')
+                ->nullable()->constrained('rank_grades')->nullOnDelete()
+                ->comment('Lowest acceptable rank grade for this post');
+            $table->foreignId('max_rank_grade_id')
+                ->nullable()->constrained('rank_grades')->nullOnDelete()
+                ->comment('Highest acceptable rank grade for this post');
+            $table->string('title')->comment('e.g. Commanding Officer, Officer Commanding');
+            $table->string('abbreviation', 30)->comment('e.g. CO, OC, RSM, CSM');
+            $table->string('category', 50)->comment('Cast: AppointmentCategory enum');
+            $table->string('type', 50)->comment('Cast: AppointmentType enum');
+            $table->boolean('is_command')->default(false)
+                ->comment('True for command appointments (CO, OC, Pl Comd)');
+            $table->boolean('is_active')->default(true);
+            $table->unsignedTinyInteger('sort_order')->default(0);
+            $table->text('remarks')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
+
+            $table->index(['unit_id', 'is_active']);
+            $table->index(['unit_id', 'is_command']);
+            $table->unique(['unit_id', 'abbreviation']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('appointments');
+    }
+};

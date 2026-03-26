@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Illuminate\Database\Eloquent\Collection otherRanks(string $formationAbbreviation)
  * @method static \Illuminate\Database\Eloquent\Collection tree(string $formationAbbreviation)
  * @method static \Illuminate\Database\Eloquent\Collection units(string $formationAbbreviation)
+ * @method static \Illuminate\Database\Eloquent\Collection appointments(string|\MaxieWright\TtdfOrbat\Models\Unit $unit)
+ * @method static \Illuminate\Database\Eloquent\Collection commandAppointments(string|\MaxieWright\TtdfOrbat\Models\Unit $unit)
  *
  * @see \MaxieWright\TtdfOrbat\TtdfOrbat
  */

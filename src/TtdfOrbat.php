@@ -5,6 +5,7 @@ namespace MaxieWright\TtdfOrbat;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use MaxieWright\TtdfOrbat\Enums\RankCategory;
+use MaxieWright\TtdfOrbat\Models\Appointment;
 use MaxieWright\TtdfOrbat\Models\Formation;
 use MaxieWright\TtdfOrbat\Models\Rank;
 use MaxieWright\TtdfOrbat\Models\RankGrade;
@@ -12,7 +13,7 @@ use MaxieWright\TtdfOrbat\Models\Unit;
 
 class TtdfOrbat
 {
-    public const VERSION = '1.0.0';
+    public const VERSION = '0.2.0';
 
     public function version(): string
     {
@@ -39,7 +40,7 @@ class TtdfOrbat
     public function ranks(string $formationAbbreviation): Collection
     {
         return $this->cached("ranks.{$formationAbbreviation}", function () use ($formationAbbreviation) {
-            $formation = Formation::where('abbreviation', $formationAbbreviation)->first();
+            $formation = $this->resolveFormation($formationAbbreviation);
 
             if (! $formation) {
                 return new Collection;
@@ -88,7 +89,7 @@ class TtdfOrbat
      */
     public function tree(string $formationAbbreviation): Collection
     {
-        $formation = Formation::where('abbreviation', $formationAbbreviation)->first();
+        $formation = $this->resolveFormation($formationAbbreviation);
 
         if (! $formation) {
             return new Collection;
@@ -106,13 +107,71 @@ class TtdfOrbat
      */
     public function units(string $formationAbbreviation): Collection
     {
-        $formation = Formation::where('abbreviation', $formationAbbreviation)->first();
+        $formation = $this->resolveFormation($formationAbbreviation);
 
         if (! $formation) {
             return new Collection;
         }
 
         return Unit::active()->where('formation_id', $formation->id)->get();
+    }
+
+    /**
+     * All active appointments for a unit, ordered by sort_order.
+     * Accepts the unit abbreviation (e.g. '1TTR', 'A Coy') or a Unit model.
+     *
+     * @return Collection<int, Appointment>
+     */
+    public function appointments(string|Unit $unit): Collection
+    {
+        $unitModel = $this->resolveUnit($unit);
+
+        if (! $unitModel) {
+            return new Collection;
+        }
+
+        return $this->cached("appointments.{$unitModel->id}", fn () => Appointment::with(['minRankGrade', 'maxRankGrade'])
+            ->active()
+            ->where('unit_id', $unitModel->id)
+            ->orderBy('sort_order')
+            ->get()
+        );
+    }
+
+    /**
+     * Command appointments only for a given unit.
+     *
+     * @return Collection<int, Appointment>
+     */
+    public function commandAppointments(string|Unit $unit): Collection
+    {
+        return $this->appointments($unit)->where('is_command', true)->values();
+    }
+
+    private function resolveFormation(string $abbreviation): ?Formation
+    {
+        return Formation::where('abbreviation', $abbreviation)->first();
+    }
+
+    private function resolveUnit(string|Unit $unit): ?Unit
+    {
+        if ($unit instanceof Unit) {
+            return $unit;
+        }
+
+        $units = Unit::where('abbreviation', $unit)->take(2)->get();
+
+        $count = $units->count();
+
+        if ($count === 0) {
+            return null;
+        }
+
+        if ($count === 1) {
+            return $units->first();
+        }
+
+        throw new \RuntimeException("Ambiguous unit abbreviation [{$unit}]; multiple units share this abbreviation.");
     }
 
     private function cached(string $key, callable $resolver): mixed
