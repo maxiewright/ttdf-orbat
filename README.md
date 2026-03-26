@@ -5,7 +5,7 @@
 [![PHP](https://img.shields.io/badge/PHP-%5E8.4-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-11%20%7C%2012-blue)]()
 
-A Laravel package providing structured ORBAT (Order of Battle) reference data for the Trinidad and Tobago Defence Force. Covers formations, ranks (all three services), unit trees, vessel details, base locations, and attachment tracking.
+A Laravel package providing structured ORBAT (Order of Battle) reference data for the Trinidad and Tobago Defence Force. Covers formations, ranks (all three services), unit trees, vessel details, base locations, attachment tracking, and establishment appointments.
 
 ## Installation
 
@@ -68,6 +68,10 @@ TtdfOrbat::tree('TTR');
 // All active units for a formation (flat)
 TtdfOrbat::units('TTR');
 
+// Appointments for a unit (by abbreviation or model)
+TtdfOrbat::appointments('1TTR');
+TtdfOrbat::commandAppointments('1TTR');
+
 // Data version
 TtdfOrbat::version(); // "1.0.0"
 ```
@@ -84,6 +88,7 @@ Cache TTL is configurable in `config/ttdf-orbat.php`. Set `cache_ttl` to `0` to 
 | `Unit` | Hierarchical unit tree with adjacency list support |
 | `UnitDetail` | Vessel specs, base locations, coordinates (polymorphic) |
 | `UnitAttachment` | Temporary attachment/detachment tracking with history |
+| `Appointment` | Establishment posts within a unit (the slot, not the holder) |
 
 ### Unit Tree Traversal
 
@@ -105,6 +110,50 @@ $platoon->breadcrumb;
 $detachment->effectiveParent;
 ```
 
+### Appointments
+
+An appointment is a named establishment post within a unit — the *slot*, not the person filling it. Appointments are seeded by `NodeType`, so any new unit automatically receives the correct posts.
+
+```php
+use MaxieWright\TtdfOrbat\Models\Unit;
+
+$battalion = Unit::where('abbreviation', '1TTR')->first();
+
+// All appointments for this unit
+$battalion->appointments;
+
+// Via facade (cached, eager-loads rank grades)
+TtdfOrbat::appointments('1TTR');
+
+// Command appointments only (CO, OC, Pl Comd, etc.)
+TtdfOrbat::commandAppointments($battalion);
+
+// Accessors
+$appointment->full_title;  // "CO (Commanding Officer)"
+$appointment->rank_range;  // "OF-3 – OF-4"
+```
+
+#### TTR Formation Appointments
+
+| # | Title | Abbr | Category | Type | Rank Range |
+|---|-------|------|----------|------|------------|
+| 0 | Commanding Officer | CO | Commissioned | Command | OF-7 – OF-8 |
+| 1 | Deputy Commanding Officer | DCO | Commissioned | Command | OF-6 – OF-7 |
+| 2 | Senior Staff Officer | SSO | Commissioned | Staff | OF-5 – OF-6 |
+| 3 | Personnel Officer | G1 | Commissioned | Staff | OF-4 – OF-5 |
+| 4 | Legal Officer | LO | Commissioned | Staff | OF-3 – OF-4 |
+| 5 | Human Resource Officer | HRO | Commissioned | Staff | OF-3 – OF-4 |
+| 6 | Education Officer | EO | Commissioned | Staff | OF-3 – OF-4 |
+| 7 | Intelligence Officer | G2 | Commissioned | Staff | OF-4 – OF-5 |
+| 8 | Operations Officer | G3 | Commissioned | Staff | OF-4 – OF-5 |
+| 9 | Logistics Officer | G4 | Commissioned | Staff | OF-4 – OF-5 |
+| 10 | Projects Officer | G5 | Commissioned | Staff | OF-4 – OF-5 |
+| 11 | ICT Officer | G6 | Commissioned | Staff | OF-4 – OF-5 |
+| 12 | Regiment Signals Officer | RSO | Commissioned | Staff | OF-4 – OF-5 |
+| 13 | Public Relations Officer | G8 | Commissioned | Staff | OF-4 – OF-5 |
+| 14 | Welfare Officer | G9 | Commissioned | Staff | OF-4 – OF-5 |
+| 15 | Regimental Command Warrant Officer | RCWO | Warrant Officer | Administrative | WO-2 |
+
 ## Enums
 
 | Enum | Values |
@@ -112,6 +161,8 @@ $detachment->effectiveParent;
 | `FormationType` | `regiment`, `coast_guard`, `air_guard`, `reserve`, `joint` |
 | `NodeType` | `force`, `formation`, `headquarters`, `battalion`, `company`, `platoon`, `section`, `vessel`, `squadron`, `flight`, `station`, `wing`, `flotilla`, `detachment`, `base`, `installation`, `directorate`, `department`, `branch`, `unit` |
 | `RankCategory` | `OF` (commissioned), `WO` (warrant), `OR` (other ranks) |
+| `AppointmentType` | `command`, `staff`, `technical`, `administrative`, `medical`, `chaplain`, `legal` |
+| `AppointmentCategory` | `commissioned`, `warrant_officer`, `other_ranks`, `civilian` |
 | `ServiceBranch` | `army`, `navy`, `air`, `joint` |
 | `UnitStatus` | `active`, `reserve`, `decommissioned`, `disbanded` |
 | `VesselType` | `opv`, `cpv`, `fpc`, `fcs`, `interceptor` |
@@ -241,6 +292,15 @@ $attachment = UnitAttachment::factory()->create([
     'attached_to_id' => $bn->id,
 ]);
 $ended = UnitAttachment::factory()->ended()->create();
+
+// Appointment
+use MaxieWright\TtdfOrbat\Models\Appointment;
+
+$co = Appointment::factory()->command()->create([
+    'unit_id' => $bn->id,
+    'title' => 'Commanding Officer',
+    'abbreviation' => 'CO',
+]);
 ```
 
 ### Factory States Reference
@@ -253,6 +313,7 @@ $ended = UnitAttachment::factory()->ended()->create();
 | `UnitFactory` | `childOf($parent)`, `battalion()`, `company()`, `platoon()`, `headquarters()`, `vessel()`, `detachment()`, `decommissioned()`, `disbanded()` |
 | `UnitDetailFactory` | `forVessel($unit)`, `forBase($unit)` |
 | `UnitAttachmentFactory` | `ended()`, `withAuthority($string)` |
+| `AppointmentFactory` | `command()`, `inactive()` |
 
 ## Testing & Static Analysis
 
@@ -268,10 +329,29 @@ composer format             # Laravel Pint
 - PHP ^8.4
 - Laravel 11 or 12
 
+## Upgrading
+
+When updating the package to a new version that includes seeder changes (new appointments, updated unit data, etc.), re-run the seeder to pull in the latest reference data:
+
+```bash
+composer update maxiewright/ttdf-orbat
+
+# Publish any new migrations and run them
+php artisan vendor:publish --tag="ttdf-orbat-migrations"
+php artisan migrate
+
+# Re-seed (idempotent — safe to run on existing data)
+php artisan ttdf-orbat:seed
+
+# Or fresh seed (truncates all ORBAT tables first)
+php artisan ttdf-orbat:seed --fresh
+```
+
 ## Roadmap
 
 - TTCG unit seeder (vessels, stations, Coast Guard HQ)
 - TTAG unit seeder (flights, squadrons, Air Guard HQ)
+- TTCG/TTAG appointment seeders
 - TTDFR unit and rank seeders
 - Filament admin panel integration
 

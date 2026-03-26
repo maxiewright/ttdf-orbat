@@ -27,10 +27,10 @@ function ttrUnits(object $context, NodeType $type): Collection
         ->get();
 }
 
-it('formation node has exactly 4 appointments', function () {
+it('formation node has exactly 16 appointments', function () {
     $formationUnit = ttrUnit($this, NodeType::Formation);
 
-    expect(Appointment::where('unit_id', $formationUnit->id)->count())->toBe(4);
+    expect(Appointment::where('unit_id', $formationUnit->id)->count())->toBe(16);
 });
 
 it('each TTR battalion has exactly 6 appointments', function () {
@@ -63,6 +63,18 @@ it('formation node has exactly one is_command appointment with abbreviation CO',
 
     expect($commandAppts)->toHaveCount(1);
     expect($commandAppts->first()->abbreviation)->toBe('CO');
+});
+
+it('formation node has all G-staff appointments', function () {
+    $formationUnit = ttrUnit($this, NodeType::Formation);
+
+    $gStaff = Appointment::where('unit_id', $formationUnit->id)
+        ->whereIn('abbreviation', ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G8', 'G9'])
+        ->pluck('abbreviation')
+        ->sort()
+        ->values();
+
+    expect($gStaff->all())->toBe(['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G8', 'G9']);
 });
 
 it('battalion CO appointment has is_command true', function () {
