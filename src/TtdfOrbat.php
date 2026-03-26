@@ -159,7 +159,19 @@ class TtdfOrbat
             return $unit;
         }
 
-        return Unit::where('abbreviation', $unit)->first();
+        $units = Unit::where('abbreviation', $unit)->take(2)->get();
+
+        $count = $units->count();
+
+        if ($count === 0) {
+            return null;
+        }
+
+        if ($count === 1) {
+            return $units->first();
+        }
+
+        throw new \RuntimeException("Ambiguous unit abbreviation [{$unit}]; multiple units share this abbreviation.");
     }
 
     private function cached(string $key, callable $resolver): mixed
