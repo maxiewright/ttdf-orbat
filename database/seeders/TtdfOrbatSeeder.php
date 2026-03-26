@@ -31,10 +31,17 @@ class TtdfOrbatSeeder extends Seeder
             $this->command->info('Seeding: TtrAppointmentSeeder...');
             $this->call(TtrAppointmentSeeder::class);
 
-            // TODO: TtcgUnitSeeder — Coast Guard unit ORBAT
-            // TODO: TtagUnitSeeder — Air Guard unit ORBAT
-            // TODO: TtcgAppointmentSeeder — Coast Guard appointments
-            // TODO: TtagAppointmentSeeder — Air Guard appointments
+            $this->command->info('Seeding: TtcgUnitSeeder...');
+            $this->call(TtcgUnitSeeder::class);
+
+            $this->command->info('Seeding: TtcgAppointmentSeeder...');
+            $this->call(TtcgAppointmentSeeder::class);
+
+            $this->command->info('Seeding: TtagUnitSeeder...');
+            $this->call(TtagUnitSeeder::class);
+
+            $this->command->info('Seeding: TtagAppointmentSeeder...');
+            $this->call(TtagAppointmentSeeder::class);
         });
     }
 }

@@ -2,16 +2,16 @@
 
 namespace MaxieWright\TtdfOrbat\Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use MaxieWright\TtdfOrbat\Enums\NodeType;
 use MaxieWright\TtdfOrbat\Enums\ServiceBranch;
-use MaxieWright\TtdfOrbat\Enums\UnitStatus;
 use MaxieWright\TtdfOrbat\Models\Formation;
-use MaxieWright\TtdfOrbat\Models\Unit;
 
-class TtrUnitSeeder extends Seeder
+class TtrUnitSeeder extends AbstractUnitSeeder
 {
-    private Formation $formation;
+    protected function defaultServiceBranch(): ServiceBranch
+    {
+        return ServiceBranch::Army;
+    }
 
     public function run(): void
     {
@@ -222,24 +222,6 @@ class TtrUnitSeeder extends Seeder
                 ]);
             }
         }
-    }
-
-    private function make(string $code, array $data): Unit
-    {
-        $attributes = array_merge([
-            'formation_id' => $this->formation->id,
-            'service_branch' => ServiceBranch::Army,
-            'status' => UnitStatus::Active,
-            'designation' => $code,
-        ], $data);
-
-        return Unit::updateOrCreate(
-            [
-                'formation_id' => $attributes['formation_id'],
-                'designation' => $code,
-            ],
-            $attributes,
-        );
     }
 
     private function platoonAbbreviation(string $name): string
