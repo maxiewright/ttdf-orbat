@@ -73,7 +73,7 @@ TtdfOrbat::appointments('1TTR');
 TtdfOrbat::commandAppointments('1TTR');
 
 // Data version
-TtdfOrbat::version(); // "1.0.0"
+TtdfOrbat::version(); // "0.1.0"
 ```
 
 Cache TTL is configurable in `config/ttdf-orbat.php`. Set `cache_ttl` to `0` to disable.
