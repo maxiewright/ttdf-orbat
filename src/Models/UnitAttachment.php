@@ -5,10 +5,12 @@ namespace MaxieWright\TtdfOrbat\Models;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use MaxieWright\TtdfOrbat\Database\Factories\UnitAttachmentFactory;
 
 /**
  * @property int $id
@@ -26,6 +28,11 @@ class UnitAttachment extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    protected static function newFactory(): Factory
+    {
+        return UnitAttachmentFactory::new();
+    }
 
     protected function casts(): array
     {

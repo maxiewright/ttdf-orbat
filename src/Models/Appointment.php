@@ -5,10 +5,12 @@ namespace MaxieWright\TtdfOrbat\Models;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use MaxieWright\TtdfOrbat\Database\Factories\AppointmentFactory;
 use MaxieWright\TtdfOrbat\Enums\AppointmentCategory;
 use MaxieWright\TtdfOrbat\Enums\AppointmentType;
 
@@ -37,6 +39,11 @@ class Appointment extends Model
     use SoftDeletes;
 
     protected $guarded = [];
+
+    protected static function newFactory(): Factory
+    {
+        return AppointmentFactory::new();
+    }
 
     protected function casts(): array
     {

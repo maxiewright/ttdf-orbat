@@ -2,6 +2,7 @@
 
 namespace MaxieWright\TtdfOrbat;
 
+use MaxieWright\TtdfOrbat\Commands\InstallCommand;
 use MaxieWright\TtdfOrbat\Commands\SeedCommand;
 use MaxieWright\TtdfOrbat\Commands\StatsCommand;
 use MaxieWright\TtdfOrbat\Commands\TreeCommand;
@@ -24,8 +25,10 @@ class TtdfOrbatServiceProvider extends PackageServiceProvider
                 'create_unit_details_table',
                 'create_unit_attachments_table',
                 'create_appointments_table',
+                'create_orbat_audiences_table',
             ])
             ->hasCommands([
+                InstallCommand::class,
                 SeedCommand::class,
                 StatsCommand::class,
                 TreeCommand::class,
@@ -42,5 +45,11 @@ class TtdfOrbatServiceProvider extends PackageServiceProvider
         $this->publishes([
             __DIR__.'/../database/factories' => database_path('factories/vendor/ttdf-orbat'),
         ], "{$this->package->shortName()}-factories");
+
+        $this->publishes([
+            __DIR__.'/../database/migrations/optional/add_orbat_fields_to_users_table.php.stub' => database_path(
+                'migrations/'.date('Y_m_d_His').'_add_orbat_fields_to_users_table.php'
+            ),
+        ], "{$this->package->shortName()}-user-fields");
     }
 }
