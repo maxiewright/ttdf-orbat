@@ -1,6 +1,6 @@
 # ORBAT Reference Data for the Trinidad and Tobago Defence Force
 
-[![Tests](https://img.shields.io/badge/tests-93%20passing-brightgreen)]()
+[![Tests](https://img.shields.io/badge/tests-166%20passing-brightgreen)]()
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%205-brightgreen)]()
 [![PHP](https://img.shields.io/badge/PHP-%5E8.4-blue)]()
 [![Laravel](https://img.shields.io/badge/Laravel-11%20%7C%2012-blue)]()
