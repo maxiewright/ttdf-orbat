@@ -23,6 +23,7 @@ class TtdfOrbatServiceProvider extends PackageServiceProvider
                 'create_units_table',
                 'create_unit_details_table',
                 'create_unit_attachments_table',
+                'create_appointments_table',
             ])
             ->hasCommands([
                 SeedCommand::class,

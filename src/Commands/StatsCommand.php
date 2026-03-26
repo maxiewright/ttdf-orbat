@@ -3,6 +3,7 @@
 namespace MaxieWright\TtdfOrbat\Commands;
 
 use Illuminate\Console\Command;
+use MaxieWright\TtdfOrbat\Models\Appointment;
 use MaxieWright\TtdfOrbat\Models\Formation;
 use MaxieWright\TtdfOrbat\Models\Rank;
 use MaxieWright\TtdfOrbat\Models\RankGrade;
@@ -29,6 +30,8 @@ class StatsCommand extends Command
                 ['Units (active)', Unit::where('status', 'active')->count()],
                 ['Top-level Units', Unit::whereNull('parent_id')->count()],
                 ['Active Attachments', UnitAttachment::whereNull('effective_to')->count()],
+                ['Appointments (total)', Appointment::count()],
+                ['Appointments (command)', Appointment::where('is_command', true)->count()],
             ],
         );
 

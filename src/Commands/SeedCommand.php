@@ -17,7 +17,7 @@ class SeedCommand extends Command
         if ($this->option('fresh')) {
             $this->components->warn('Truncating ORBAT tables...');
 
-            $tables = ['unit_attachments', 'unit_details', 'units', 'ranks', 'rank_grades', 'formations'];
+            $tables = ['appointments', 'unit_attachments', 'unit_details', 'units', 'ranks', 'rank_grades', 'formations'];
 
             foreach ($tables as $table) {
                 DB::table($table)->truncate();
