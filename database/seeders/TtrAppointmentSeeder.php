@@ -35,22 +35,32 @@ class TtrAppointmentSeeder extends Seeder
                 }
 
                 foreach ($template as $sortOrder => $row) {
-                    Appointment::updateOrCreate(
-                        [
-                            'unit_id' => $unit->id,
-                            'abbreviation' => $row['abbreviation'],
-                        ],
-                        [
-                            'title' => $row['title'],
-                            'category' => $row['category'],
-                            'type' => $row['type'],
-                            'is_command' => $row['is_command'],
-                            'min_rank_grade_id' => $this->gradeId($row['min_grade']),
-                            'max_rank_grade_id' => $this->gradeId($row['max_grade']),
-                            'is_active' => true,
-                            'sort_order' => $sortOrder,
-                        ],
-                    );
+                    $attributes = [
+                        'unit_id' => $unit->id,
+                        'abbreviation' => $row['abbreviation'],
+                    ];
+
+                    $values = [
+                        'title' => $row['title'],
+                        'category' => $row['category'],
+                        'type' => $row['type'],
+                        'is_command' => $row['is_command'],
+                        'min_rank_grade_id' => $this->gradeId($row['min_grade']),
+                        'max_rank_grade_id' => $this->gradeId($row['max_grade']),
+                        'is_active' => true,
+                        'sort_order' => $sortOrder,
+                    ];
+
+                    $appointment = Appointment::withTrashed()->firstOrNew($attributes);
+
+                    foreach ($values as $key => $value) {
+                        $appointment->{$key} = $value;
+                    }
+
+                    // Ensure any soft-deleted appointment is restored when reseeding.
+                    $appointment->deleted_at = null;
+
+                    $appointment->save();
                 }
             });
     }
