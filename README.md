@@ -112,7 +112,7 @@ $detachment->effectiveParent;
 
 ### Appointments
 
-An appointment is a named establishment post within a unit — the *slot*, not the person filling it. Appointments are seeded by `NodeType`, so any new unit automatically receives the correct posts.
+An appointment is a named establishment post within a unit — the *slot*, not the person filling it. Appointments are defined by `NodeType`, and running (or re-running) the seeder applies these templates to all units, including any new units you have added.
 
 ```php
 use MaxieWright\TtdfOrbat\Models\Unit;
