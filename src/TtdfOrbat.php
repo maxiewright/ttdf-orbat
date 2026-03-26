@@ -13,7 +13,7 @@ use MaxieWright\TtdfOrbat\Models\Unit;
 
 class TtdfOrbat
 {
-    public const VERSION = '0.1.0';
+    public const VERSION = '0.2.0';
 
     public function version(): string
     {
