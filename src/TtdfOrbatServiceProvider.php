@@ -46,10 +46,33 @@ class TtdfOrbatServiceProvider extends PackageServiceProvider
             __DIR__.'/../database/factories' => database_path('factories/vendor/ttdf-orbat'),
         ], "{$this->package->shortName()}-factories");
 
+        $optionalUserFieldsMigrationPath = $this->getUserFieldsMigrationPath();
+
         $this->publishes([
-            __DIR__.'/../database/migrations/optional/add_orbat_fields_to_users_table.php.stub' => database_path(
-                'migrations/'.date('Y_m_d_His').'_add_orbat_fields_to_users_table.php'
-            ),
+            __DIR__.'/../database/migrations/optional/add_orbat_fields_to_users_table.php.stub' => $optionalUserFieldsMigrationPath,
         ], "{$this->package->shortName()}-user-fields");
+    }
+
+    /**
+     * Determine the destination path for the optional user-fields migration.
+     *
+     * If a migration ending with "_add_orbat_fields_to_users_table.php" already exists,
+     * reuse that path so that republishing is idempotent. Otherwise, create a new
+     * timestamped filename in the migrations directory.
+     */
+    private function getUserFieldsMigrationPath(): string
+    {
+        $migrationDirectory = database_path('migrations');
+
+        if (is_dir($migrationDirectory)) {
+            $existingMigrations = glob($migrationDirectory . '/*_add_orbat_fields_to_users_table.php');
+
+            if (! empty($existingMigrations)) {
+                // Reuse the first existing migration file (there should normally be only one).
+                return $existingMigrations[0];
+            }
+        }
+
+        return $migrationDirectory . '/' . date('Y_m_d_His') . '_add_orbat_fields_to_users_table.php';
     }
 }
