@@ -21,6 +21,7 @@ class InstallCommand extends Command
         ]);
         if ($configExitCode !== self::SUCCESS) {
             $this->error('  ✗ Failed to publish config (tag: ttdf-orbat-config)');
+
             return self::FAILURE;
         }
         $this->info('  ✓ Config published to config/ttdf-orbat.php');
@@ -31,6 +32,7 @@ class InstallCommand extends Command
         ]);
         if ($migrationsExitCode !== self::SUCCESS) {
             $this->error('  ✗ Failed to publish migrations (tag: ttdf-orbat-migrations)');
+
             return self::FAILURE;
         }
         $this->info('  ✓ Migrations published');
@@ -42,6 +44,7 @@ class InstallCommand extends Command
             ]);
             if ($userFieldsExitCode !== self::SUCCESS) {
                 $this->error('  ✗ Failed to publish user-fields migration (tag: ttdf-orbat-user-fields)');
+
                 return self::FAILURE;
             }
             $this->info('  ✓ User-fields migration published (add BelongsToOrbat to your User model)');
