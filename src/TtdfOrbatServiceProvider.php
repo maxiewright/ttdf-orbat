@@ -65,7 +65,7 @@ class TtdfOrbatServiceProvider extends PackageServiceProvider
         $migrationDirectory = database_path('migrations');
 
         if (is_dir($migrationDirectory)) {
-            $existingMigrations = glob($migrationDirectory . '/*_add_orbat_fields_to_users_table.php');
+            $existingMigrations = glob($migrationDirectory.'/*_add_orbat_fields_to_users_table.php');
 
             if (! empty($existingMigrations)) {
                 // Reuse the first existing migration file (there should normally be only one).
@@ -73,6 +73,6 @@ class TtdfOrbatServiceProvider extends PackageServiceProvider
             }
         }
 
-        return $migrationDirectory . '/' . date('Y_m_d_His') . '_add_orbat_fields_to_users_table.php';
+        return $migrationDirectory.'/'.date('Y_m_d_His').'_add_orbat_fields_to_users_table.php';
     }
 }
