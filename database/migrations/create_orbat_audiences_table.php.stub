@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('orbat_audiences', function (Blueprint $table): void {
             $table->id();
-            $table->morphs('auditable');
-            $table->morphs('targetable');
+            $table->uuidMorphs('auditable');
+            $table->uuidMorphs('targetable');
             $table->timestamps();
 
             $table->unique(['auditable_type', 'auditable_id', 'targetable_type', 'targetable_id'], 'orbat_audiences_unique');
