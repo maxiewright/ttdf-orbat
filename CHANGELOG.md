@@ -1,5 +1,25 @@
 # Changelog
 
+## v0.3.1 — Laravel 13 Support
+
+### Added
+
+- **Laravel 13 compatibility** — widened `illuminate/contracts` to `^11.0||^12.0||^13.0` and `orchestra/testbench` to `^11.0||^10.0.0||^9.0.0`
+
+### Fixed
+
+- **`HasOrbatAudienceTraitTest`** — replaced strict `toBe()` with `toEqual()` for `targetable_id` assertions to handle SQLite returning string IDs
+
+### Upgrade Guide
+
+```bash
+composer update maxiewright/ttdf-orbat
+```
+
+No migrations or re-seeding required.
+
+---
+
 ## v0.3.0 — Consumer Traits, Install Command & Complete ORBAT Seeding
 
 ### Added
