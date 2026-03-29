@@ -46,7 +46,7 @@ it('addAudience() creates an OrbatAudience record for a Formation', function () 
 
     expect(OrbatAudience::count())->toBe(1);
     expect(OrbatAudience::first()->targetable_type)->toBe($formation->getMorphClass());
-    expect(OrbatAudience::first()->targetable_id)->toBe($formation->id);
+    expect(OrbatAudience::first()->targetable_id)->toEqual($formation->id);
 });
 
 it('addAudience() creates an OrbatAudience record for a Unit', function () {
@@ -56,7 +56,7 @@ it('addAudience() creates an OrbatAudience record for a Unit', function () {
     $notice->addAudience($unit);
 
     expect($notice->orbatAudiences()->count())->toBe(1);
-    expect($notice->orbatAudiences()->first()->targetable_id)->toBe($unit->id);
+    expect($notice->orbatAudiences()->first()->targetable_id)->toEqual($unit->id);
 });
 
 it('addAudience() creates an OrbatAudience record for a RankGrade', function () {
