@@ -55,6 +55,27 @@ class TtrAppointmentSeeder extends AbstractAppointmentSeeder
                 ['title' => 'Platoon Commander', 'abbreviation' => 'Pl Comd', 'category' => AppointmentCategory::Commissioned, 'type' => AppointmentType::Command, 'is_command' => true, 'min_grade' => 'OF-1', 'max_grade' => 'OF-2'],
                 ['title' => 'Platoon Sergeant', 'abbreviation' => 'Pl Sgt', 'category' => AppointmentCategory::OtherRanks, 'type' => AppointmentType::Command, 'is_command' => false, 'min_grade' => 'OR-4', 'max_grade' => 'OR-4'],
             ],
+            NodeType::Squadron->value => [
+                ['title' => 'Officer Commanding', 'abbreviation' => 'OC', 'category' => AppointmentCategory::Commissioned, 'type' => AppointmentType::Command, 'is_command' => true, 'min_grade' => 'OF-3', 'max_grade' => 'OF-4'],
+                ['title' => 'Squadron Second in Command', 'abbreviation' => '2IC', 'category' => AppointmentCategory::Commissioned, 'type' => AppointmentType::Command, 'is_command' => false, 'min_grade' => 'OF-2', 'max_grade' => 'OF-3'],
+                ['title' => 'Squadron Sergeant Major', 'abbreviation' => 'SSM', 'category' => AppointmentCategory::WarrantOfficer, 'type' => AppointmentType::Command, 'is_command' => false, 'min_grade' => 'WO-1', 'max_grade' => 'WO-1'],
+                ['title' => 'Squadron Quartermaster Sergeant', 'abbreviation' => 'SQMS', 'category' => AppointmentCategory::OtherRanks, 'type' => AppointmentType::Administrative, 'is_command' => false, 'min_grade' => 'OR-5', 'max_grade' => 'OR-5'],
+            ],
+            // Detachment and Headquarters share the same organic command/admin element.
+            // The regimental command group and G1–G9 staff live on the Formation (TTR) node;
+            // the RHQ "Detachment Command (Det Office)" element matches the detachment core.
+            NodeType::Detachment->value => [
+                ['title' => 'Detachment Commander', 'abbreviation' => 'Det Comd', 'category' => AppointmentCategory::Commissioned, 'type' => AppointmentType::Command, 'is_command' => true, 'min_grade' => 'OF-3', 'max_grade' => 'OF-4'],
+                ['title' => 'Detachment Second in Command', 'abbreviation' => 'Det 2IC', 'category' => AppointmentCategory::Commissioned, 'type' => AppointmentType::Command, 'is_command' => false, 'min_grade' => 'OF-2', 'max_grade' => 'OF-3'],
+                ['title' => 'Detachment Sergeant Major', 'abbreviation' => 'DSM', 'category' => AppointmentCategory::WarrantOfficer, 'type' => AppointmentType::Command, 'is_command' => false, 'min_grade' => 'WO-1', 'max_grade' => 'WO-1'],
+                ['title' => 'Detachment Quartermaster Sergeant', 'abbreviation' => 'DQMS', 'category' => AppointmentCategory::OtherRanks, 'type' => AppointmentType::Administrative, 'is_command' => false, 'min_grade' => 'OR-5', 'max_grade' => 'OR-5'],
+            ],
+            NodeType::Headquarters->value => [
+                ['title' => 'Detachment Commander', 'abbreviation' => 'Det Comd', 'category' => AppointmentCategory::Commissioned, 'type' => AppointmentType::Command, 'is_command' => true, 'min_grade' => 'OF-3', 'max_grade' => 'OF-4'],
+                ['title' => 'Detachment Second in Command', 'abbreviation' => 'Det 2IC', 'category' => AppointmentCategory::Commissioned, 'type' => AppointmentType::Command, 'is_command' => false, 'min_grade' => 'OF-2', 'max_grade' => 'OF-3'],
+                ['title' => 'Detachment Sergeant Major', 'abbreviation' => 'DSM', 'category' => AppointmentCategory::WarrantOfficer, 'type' => AppointmentType::Command, 'is_command' => false, 'min_grade' => 'WO-1', 'max_grade' => 'WO-1'],
+                ['title' => 'Detachment Quartermaster Sergeant', 'abbreviation' => 'DQMS', 'category' => AppointmentCategory::OtherRanks, 'type' => AppointmentType::Administrative, 'is_command' => false, 'min_grade' => 'OR-5', 'max_grade' => 'OR-5'],
+            ],
         ];
     }
 }
