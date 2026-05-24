@@ -166,6 +166,9 @@ class TtrUnitSeeder extends AbstractUnitSeeder
             'sort_order' => 3,
         ]);
 
+        // Sp Wpns appears in NONE of the 6 official TTR org-structure PDFs (see SPEAR
+        // establishment/sp_wpns.php). Retained for abbreviation stability — consumers key on
+        // 'Sp Wpns'. Populate/reconcile when a Support Weapons org chart is provided.
         $this->make('SPWPNS', [
             'name' => 'Support Weapons Operations Detachment',
             'abbreviation' => 'Sp Wpns',
@@ -197,6 +200,15 @@ class TtrUnitSeeder extends AbstractUnitSeeder
             'node_type' => NodeType::Company,
             'parent_id' => $ssb->id,
             'sort_order' => 2,
+        ]);
+
+        // ----- Army Learning Centre (detachment under SSB) -----
+        $this->make('ALC', [
+            'name' => 'Army Learning Centre',
+            'abbreviation' => 'ALC',
+            'node_type' => NodeType::Detachment,
+            'parent_id' => $ssb->id,
+            'sort_order' => 3,
         ]);
 
         // ----- Platoons -----
