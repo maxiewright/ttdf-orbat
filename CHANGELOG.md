@@ -1,5 +1,28 @@
 # Changelog
 
+## v0.4.0 — Army Learning Centre & Complete TTR Appointments
+
+### Added
+
+- **Army Learning Centre (ALC)** — seeded in `TtrUnitSeeder` as a `Detachment` under the Support and Service Battalion (`SSB`), matching the official ALC org chart. Modelled as a single folded detachment (internal Det HQ / NRTD / OWTD / Curriculum & Training Design elements are captured as appointments/establishment, not separate units), consistent with how SFOD and Sp Wpns are modelled.
+- **TTR appointment templates for `Detachment`, `Squadron`, and `Headquarters` node types** in `TtrAppointmentSeeder` — previously these node types received no appointments. Detachments (SFOD, Sp Wpns, ALC) and the RHQ headquarters now seed the organic command element (`Det Comd`, `Det 2IC`, `DSM`, `DQMS`); engineer squadrons (Spt Sqn, Fld Con Sqn, EME Sqn) seed `OC`, `2IC`, `SSM`, `SQMS`. Grades and `is_command` flags mirror the existing Company core.
+
+### Notes
+
+- The `Sp Wpns` detachment is documented in-seeder as having no source in the 6 official org charts; it is retained for abbreviation stability (consumers key on `Sp Wpns`).
+- TTR unit count: 46 → 47. No schema changes. TTAG/TTCG data unchanged. Authorised establishment counts remain an HRIS concern in SPEAR.
+
+### Upgrade Guide
+
+```bash
+composer update maxiewright/ttdf-orbat
+php artisan ttdf-orbat:seed
+```
+
+The seeder is idempotent — running it on existing data updates changed rows without duplicating. No migrations or re-publishing required.
+
+---
+
 ## v0.3.1 — Laravel 13 Support
 
 ### Added
