@@ -27,6 +27,7 @@ use MaxieWright\TtdfOrbat\Enums\AppointmentType;
  * @property bool $is_active
  * @property int $sort_order
  * @property string|null $remarks
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read Unit $unit
  * @property-read RankGrade|null $minRankGrade
  * @property-read RankGrade|null $maxRankGrade

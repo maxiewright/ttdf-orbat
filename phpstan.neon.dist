@@ -8,3 +8,12 @@ parameters:
         - config
         - database
     tmpDir: build/phpstan
+    ignoreErrors:
+        # BelongsToOrbat and HasOrbatAudience are consumer-facing traits — they are mixed into
+        # the host application's models (e.g. User, Notice), never used inside this package, so
+        # PHPStan correctly reports them as "used zero times". That is by design for a library.
+        -
+            identifier: trait.unused
+            paths:
+                - src/Traits/BelongsToOrbat.php
+                - src/Traits/HasOrbatAudience.php
